@@ -1,9 +1,15 @@
-function App() {
+import Navbar from './components/Navbar'
+import Hero from './components/Hero'
+import SeasonSection from './components/SeasonSection'
+import TopAiring from './components/TopAiring'
+
+export default function App() {
   return (
-    <div>
-      <h1>Anime List</h1>
-    </div>
+    <>
+      <Navbar />
+      <Hero />
+      <SeasonSection />
+      <TopAiring />
+    </>
   )
 }
-
-export default App
