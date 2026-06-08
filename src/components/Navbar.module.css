@@ -41,6 +41,10 @@
   gap: 4px;
 }
 
+.navItem {
+  position: relative;
+}
+
 .link {
   display: block;
   padding: 6px 14px;
@@ -50,9 +54,53 @@
   border-radius: 8px;
   transition: color 0.2s, background 0.2s;
 }
-.link:hover {
+.link:hover,
+.link:focus-visible {
   color: var(--text-primary);
   background: var(--bg-elevated);
+}
+
+.submenu {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  min-width: 220px;
+  background: rgba(12, 12, 20, 0.96);
+  border: 1px solid var(--border-subtle);
+  border-radius: 18px;
+  padding: 10px 0;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease;
+  z-index: 20;
+}
+
+.navItem:hover .submenu,
+.navItem:focus-within .submenu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.submenu li {
+  margin: 0;
+}
+
+.submenuLink {
+  display: block;
+  padding: 10px 18px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  transition: background 0.2s, color 0.2s;
+}
+.submenuLink:hover,
+.submenuLink:focus-visible {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
 }
 
 /* Right side */
@@ -152,4 +200,27 @@
   .hamburger { display: flex; }
   .searchInput { width: 130px; }
   .loginBtn { display: none; }
+
+  .navItem {
+    width: 100%;
+  }
+
+  .submenu {
+    position: static;
+    top: auto;
+    left: auto;
+    min-width: auto;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    pointer-events: auto;
+  }
+
+  .submenuLink {
+    padding-left: 28px;
+  }
 }
