@@ -1,15 +1,18 @@
 import Navbar from './components/Navbar'
-import Hero from './components/Hero'
-import SeasonSection from './components/SeasonSection'
-import TopAiring from './components/TopAiring'
+import Home from './pages/Home'
+import Anime from './pages/Anime'
+
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 export default function App() {
   return (
-    <>
+    <BrowserRouter>
       <Navbar />
-      <Hero />
-      <SeasonSection />
-      <TopAiring />
-    </>
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/anime" element={<Anime />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
