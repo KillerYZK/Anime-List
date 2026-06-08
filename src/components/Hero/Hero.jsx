@@ -1,67 +1,61 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import styles from './Hero.module.css'
 
-const FEATURED = [
-  {
-    id: 1,
-    title: 'Steel Ball Run',
-    subtitle: 'JoJo no Kimyou na Bouken',
-    score: '9.13',
-    genre: 'Aventura • Acción • Sobrenatural',
-    desc: 'Una carrera a caballo a lo largo de Estados Unidos esconde secretos oscuros y poderes místicos en esta épica aventura.',
-    tag: 'ONA · En emisión',
-    color: '#c0392b',
-    placeholder: 'SBR',
-  },
-  {
-    id: 2,
-    title: 'Re:Zero',
-    subtitle: '4ta Temporada',
-    score: '8.97',
-    genre: 'Isekai • Drama • Fantasía',
-    desc: 'Subaru Natsuki regresa con más desafíos y emociones en la continuación de este aclamado isekai.',
-    tag: 'TV · 19 eps',
-    color: '#2980b9',
-    placeholder: 'RZ',
-  },
-  {
-    id: 3,
-    title: 'Tongari Boushi',
-    subtitle: 'no Atelier',
-    score: '8.72',
-    genre: 'Magia • Aventura • Slice of Life',
-    desc: 'Una joven descubre el mundo de la magia y los sombreros encantados en esta hermosa historia de crecimiento.',
-    tag: 'TV · 13 eps',
-    color: '#8e44ad',
-    placeholder: 'TB',
-  },
-]
+const COLORS = ['#c0392b', '#2980b9', '#8e44ad', '#e74c3c', '#f39c12']
 
-export default function Hero() {
+export default function Hero({ animes = [] }) {
   const [active, setActive] = useState(0)
-  const current = FEATURED[active]
+
+  const handlePrev = () => {
+    setActive(prev => (prev - 1 + animes.length) % animes.length)
+  }
+
+  const handleNext = () => {
+    setActive(prev => (prev + 1) % animes.length)
+  }
+
+  useEffect(() => {
+    if (!animes || animes.length === 0) return
+
+    const timer = setInterval(() => {
+      setActive(prev => (prev + 1) % animes.length)
+    }, 5000)
+
+    return () => clearInterval(timer)
+  }, [animes.length])
+  
+  if (!animes || animes.length === 0) {
+    return <div style={{ height: '500px' }}>Cargando...</div>
+  }
+  
+  const current = animes[active]
+  const color = COLORS[active % COLORS.length]
 
   return (
     <section className={styles.hero}>
       {/* Background glow */}
-      <div className={styles.bgGlow} style={{ '--accent': current.color }} />
+      <div className={styles.bgGlow} style={{ '--accent': color }} />
 
       <div className={styles.inner}>
         {/* Left: info */}
         <div className={styles.info}>
-          <span className={styles.tag}>{current.tag}</span>
-          <h1 className={styles.title}>{current.title}</h1>
-          <p className={styles.subtitle}>{current.subtitle}</p>
+          <span className={styles.tag}>{current.type || 'TV'} · {current.airing?.status || 'En emisión'}</span>
+          <div className={styles.titleWrapper}>
+            <h1 className={styles.title}>{current.title}</h1>
+          </div>
+          <p className={styles.subtitle}>{current.title_english || ''}</p>
           <div className={styles.meta}>
             <span className={styles.score}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--pink)">
                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
               </svg>
-              {current.score}
+              {current.score || 'N/A'}
             </span>
-            <span className={styles.genre}>{current.genre}</span>
+            <span className={styles.genre}>
+              {current.genres?.map(g => g.name).join(' • ') || 'Anime'}
+            </span>
           </div>
-          <p className={styles.desc}>{current.desc}</p>
+          <p className={styles.desc}>{current.synopsis?.slice(0, 200)}...</p>
           <div className={styles.actions}>
             <button className={styles.btnPrimary}>Ver detalles</button>
             <button className={styles.btnSecondary}>+ Añadir lista</button>
@@ -70,19 +64,41 @@ export default function Hero() {
 
         {/* Right: card */}
         <div className={styles.cardWrap}>
-          <div className={styles.card} style={{ '--accent': current.color }}>
-            <div className={styles.cardPlaceholder}>
-              <span>{current.placeholder}</span>
-            </div>
+          <div className={styles.card} style={{ '--accent': color }}>
+            {current.images?.jpg?.large_image_url ? (
+              <img 
+                src={current.images.jpg.large_image_url} 
+                alt={current.title}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  borderRadius: '8px'
+                }}
+              />
+            ) : (
+              <div className={styles.cardPlaceholder}>
+                <span>{current.title.slice(0, 2).toUpperCase()}</span>
+              </div>
+            )}
             <div className={styles.cardGlare} />
           </div>
-          <div className={styles.cardShadow} style={{ '--accent': current.color }} />
+          <div className={styles.cardShadow} style={{ '--accent': color }} />
+
+          <div className={styles.heroNav}>
+            <button type="button" className={styles.heroButton} onClick={handlePrev} aria-label="Anterior">
+              ‹
+            </button>
+            <button type="button" className={styles.heroButton} onClick={handleNext} aria-label="Siguiente">
+              ›
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Dots */}
       <div className={styles.dots}>
-        {FEATURED.map((_, i) => (
+        {animes.map((_, i) => (
           <button
             key={i}
             className={`${styles.dot} ${i === active ? styles.dotActive : ''}`}
