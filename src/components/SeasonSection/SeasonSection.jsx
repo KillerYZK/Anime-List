@@ -1,4 +1,4 @@
-import AnimeCard from './AnimeCard'
+import AnimeCard from '../AnimeCard'
 import styles from './SeasonSection.module.css'
 
 const SEASON_ANIME = [
