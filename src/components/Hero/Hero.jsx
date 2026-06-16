@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import styles from './Hero.module.css'
 
 const COLORS = ['#c0392b', '#2980b9', '#8e44ad', '#e74c3c', '#f39c12']
 
 export default function Hero({ animes = [] }) {
   const [active, setActive] = useState(0)
+  const navigate = useNavigate()
 
   const handlePrev = () => {
     setActive(prev => (prev - 1 + animes.length) % animes.length)
@@ -12,6 +14,10 @@ export default function Hero({ animes = [] }) {
 
   const handleNext = () => {
     setActive(prev => (prev + 1) % animes.length)
+  }
+
+  const handleViewDetails = () => {
+    navigate(`/anime/${animes[active].mal_id}`)
   }
 
   useEffect(() => {
@@ -57,7 +63,7 @@ export default function Hero({ animes = [] }) {
           </div>
           <p className={styles.desc}>{current.synopsis?.slice(0, 200)}...</p>
           <div className={styles.actions}>
-            <button className={styles.btnPrimary}>Ver detalles</button>
+            <button className={styles.btnPrimary} onClick={handleViewDetails}>Ver detalles</button>
             <button className={styles.btnSecondary}>+ Añadir lista</button>
           </div>
         </div>

@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import styles from './TopAiring.module.css'
 
 const COLORS = ['#e74c3c', '#3498db', '#f39c12', '#9b59b6', '#ff7eb3', '#1abc9c', '#e67e22', '#34495e']
@@ -30,7 +31,9 @@ export default function TopAiring({ animes }) {
                     )}
                   </div>
                   <div className={styles.itemInfo}>
-                    <p className={styles.itemTitle}>{item.title}</p>
+                    <Link to={`/anime/${item.mal_id}`} className={styles.itemTitle}>
+                      {item.title}
+                    </Link>
                     <p className={styles.itemMeta}>
                       <span className={styles.itemType}>{item.type || 'N/A'}</span>
                       <span className={styles.itemScore}>

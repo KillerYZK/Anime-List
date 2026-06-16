@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
+import { Routes, Route } from 'react-router-dom';
 import './App.css';
 import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import TopAiring from './components/TopAiring';
-import AnimeCard from './components/AnimeCard';
+import AnimeView from './pages/AnimeView';
+import Home from './pages/Home';
+import Anime from './pages/Anime';
+import Manga from './pages/Manga';
 
 function App() {
   const [animes, setAnimes] = useState([]);
@@ -13,7 +15,6 @@ function App() {
   useEffect(() => {
     const obtenerAnimes = async () => {
       try {
-        // Obtener anime actual (airing)
         const respuesta = await fetch('https://api.jikan.moe/v4/seasons/now?limit=25');
         const { data } = await respuesta.json();
         
@@ -35,8 +36,12 @@ function App() {
   return (
     <div className="App">
       <Navbar />
-      <Hero animes={animes} />
-      <TopAiring animes={animes} />
+      <Routes>
+        <Route path="/" element={<Home animes={animes} />} />
+        <Route path="/anime/:id" element={<AnimeView />} />
+        <Route path="/anime" element={<Anime />} />
+        <Route path="/manga" element={<Manga />} />
+      </Routes>
     </div>
   );
 }

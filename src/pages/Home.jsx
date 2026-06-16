@@ -1,15 +1,13 @@
-import Navbar from '../components/Navbar'
 import Hero from '../components/Hero'
 import SeasonSection from '../components/SeasonSection'
 import TopAiring from '../components/TopAiring'
 
-export default function Home() {
+export default function Home({ animes }) {
   return (
     <>
-      <Navbar />
-      <Hero />
+      <Hero animes={animes} />
       <SeasonSection />
-      <TopAiring />
+      <TopAiring animes={animes} />
     </>
   )
 }
